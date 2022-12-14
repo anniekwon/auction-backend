@@ -40,8 +40,9 @@ rt.delete('/delete/:productId', getProduct, async (req, res) => {
 rt.get('/show-bids/:productId', getProduct, async (req, res) => {
     try {
         const query = { productId: req.params.productId }
+        const sortByBid = { bidAmount: -1}
         const product = res.product;
-        const bids = await Bid.find(query)
+        const bids = await Bid.find(query).sort(sortByBid)
         res.json({product, bids});
     } catch(err) {
         res.status(500).json({ message: err.message });
