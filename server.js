@@ -29,9 +29,9 @@ app.use(express.json());
 const sellerRouter = require('./routes/sellerRoute');
 app.use('/e-auction/api/v1/seller', sellerRouter);
 
-//BUYER ROUTE
-const buyerRouter = require('./routes/buyerRoute');
-app.use('/e-auction/api/v1/buyer', buyerRouter);
+// //BUYER ROUTE
+// const buyerRouter = require('./routes/buyerRoute');
+// app.use('/e-auction/api/v1/buyer', buyerRouter);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log('Server has started on ' + port));
