@@ -36,16 +36,47 @@ rt.delete('/delete/:productId', getProduct, async (req, res) => {
     }
 })
 
+// //GET ALL BIDS ON AN UNIQUE PRODUCT AS A SELLER
+// rt.get('/show-bids/:productId', getProduct, async (req, res) => {
+//     try {
+//         const query = { productId: req.params.productId }
+//         const sortByBid = { bidAmount: -1}
+//         const product = res.product;
+//         const bids = await Bid.find(query).sort(sortByBid)
+//         res.json({product, bids});
+//     } catch(err) {
+//         res.status(500).json({ message: err.message });
+//     }
+// })
+
 //GET ALL BIDS ON AN UNIQUE PRODUCT AS A SELLER
-rt.get('/show-bids/:productId', getProduct, async (req, res) => {
+rt.get('/show-product/:productId', getProduct, async (req, res) => {
     try {
-        const query = { productId: req.params.productId }
-        const sortByBid = { bidAmount: -1}
-        const product = res.product;
-        const bids = await Bid.find(query).sort(sortByBid)
-        res.json({product, bids});
+        res.send(res.product);
     } catch(err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message })
+    }
+});
+
+//GET ALL BIDS ON AN UNIQUE PRODUCT AS A SELLER
+rt.get('/show-bids/:productId', async (req, res) => {
+    try {
+        const query = { productId: req.params.productId };
+        const sortByBid = { bidAmount: -1}
+        const bids = await Bid.find(query).sort(sortByBid)
+        res.json(bids)
+
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+})
+
+//GET ALL BUYERS ON AN UNIQUE PRODUCT AS A SELLER
+rt.get('/show-buyers/:productId', async (req, res) => {
+    try {
+
+    } catch (err) {
+        res.status(500).json({ message: err.message })
     }
 })
 
