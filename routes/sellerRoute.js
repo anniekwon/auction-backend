@@ -84,6 +84,46 @@ rt.get('/show-bids/:productId', async (req, res) => {
     }
 });
 
+//TESTING
+rt.get('/detail/:name', async (req, res) => {
+    try {
+        const query = { name: req.params.name }
+        const result = await Product.findOne(query)
+        res.json(result)
+    } catch(err) {
+        res.status(500).json({ message: err.message })
+    }
+})
+
+//TESTING FOR BID DETAIL
+rt.get('/detail-bid/:name', async (req, res) => {
+    let arr = []
+    try {
+        const query = { name: req.params.name }
+        const result = await Product.findOne(query)
+        const id = result.id
+        const bids = await Bid.find({productId: id}).sort({ bidAmount: -1 })
+        
+        for(let i=0; i<bids.length; i++) {
+            let buyerQuery = { email: bids[i].email };
+            let buyers = await Buyer.find(buyerQuery);
+            
+            let x = {
+                bidAmount: bids[i].bidAmount,
+                firstName: buyers[0].firstName,
+                email: buyers[0].email,
+                phone: buyers[0].phone
+            }
+
+            arr.push(x)
+        }
+
+        res.json(arr)
+    } catch(err) {
+        res.status(500).json({ message: err.message })
+    }
+})
+
 //MIDDLEWARE FOR AN UNIQUE PRODUCT
 async function getProduct(req, res, next) {
     let product;
