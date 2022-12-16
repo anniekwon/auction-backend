@@ -2,7 +2,8 @@ const express = require('express');
 const rt = express.Router();
 const Product = require('../models/productModel');
 const Bid = require('../models/bidModel');
-const Buyer = require('../models/buyerModel')
+const Buyer = require('../models/buyerModel');
+const { restart } = require('nodemon');
 
 //GET ALL PRODUCTS AS A SELLER 
 rt.get('/', async (req, res) => {
@@ -24,6 +25,13 @@ rt.post('/add-product', async (req, res) => {
         endDate: req.body.endDate,
         bid: false
     })
+
+    try {
+        const newProduct = await product.save();
+        res.status(201).json(newProduct);
+    } catch(err) {
+        res.status(400).json({ message: err.message })
+    }
 })
 
 //DELETE A PRODUCT AS A SELLER 
