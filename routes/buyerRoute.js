@@ -21,14 +21,21 @@ rt.post('/place-bid', async (req, res) => {
             });
             
             const price = await Product.findById(req.body.productId);
-            const nowDate = Date();
-            console.log(nowDate)
-            if(req.body.bidAmount > price.price) {
-                const newBid = await bid.save();
-                res.status(201).json(newBid)
+            const nowDate = new Date();
+            const endDate = new Date(price.endDate);
+            const diffDay = (endDate.getTime() - nowDate.getTime())/(1000*3600*24);
+
+            if(diffDay <= 0) {
+                res.send({ message: "The bid ended on " +  endDate.toString().substring(4, 15) })
             } else {
-                res.json({ message: "Your bid is too low. The starting price is: " + price.price})
-            }         
+                if(req.body.bidAmount > price.price) {
+                    const newBid = await bid.save();
+                    res.status(201).json(newBid)
+                } else {
+                    res.json({ message: "Your bid is too low. The starting price is: $" + price.price})
+                }    
+            }
+                 
         }
         
     } catch(err) {
