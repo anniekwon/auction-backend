@@ -74,7 +74,21 @@ rt.get('/show-bids/:productId', async (req, res) => {
 //GET ALL BUYERS ON AN UNIQUE PRODUCT AS A SELLER
 rt.get('/show-buyers/:productId', async (req, res) => {
     try {
+        const emailQuery = { productId: req.params.productId };
+        const buyersByEmail = await Bid.find(emailQuery)
+        let arr = []
+        const emailId = buyersByEmail.map((value) => {
 
+            let x = { email: value.email }
+            return x
+
+        })
+        for(let i=0; i< emailId.length; i++) {
+            let a = await Buyer.find(emailId[i]);
+            arr.push(a[0])
+        }
+       
+        res.json(arr)
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
