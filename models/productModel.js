@@ -19,6 +19,9 @@ const productSchema = new mg.Schema({
         type: Date,
         required: true
     },
+    image: {
+        type: String
+    },
     bid: {
         type: Boolean
     }

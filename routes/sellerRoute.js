@@ -23,6 +23,7 @@ rt.post('/add-product', async (req, res) => {
         category: req.body.category,
         price: req.body.price,
         endDate: req.body.endDate,
+        image: req.body.image,
         bid: false
     })
 
