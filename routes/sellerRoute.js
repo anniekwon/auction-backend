@@ -44,18 +44,6 @@ rt.delete('/delete/:productId', getProduct, async (req, res) => {
     }
 })
 
-// //GET ALL BIDS ON AN UNIQUE PRODUCT AS A SELLER
-// rt.get('/show-bids/:productId', getProduct, async (req, res) => {
-//     try {
-//         const query = { productId: req.params.productId }
-//         const sortByBid = { bidAmount: -1}
-//         const product = res.product;
-//         const bids = await Bid.find(query).sort(sortByBid)
-//         res.json({product, bids});
-//     } catch(err) {
-//         res.status(500).json({ message: err.message });
-//     }
-// })
 
 //GET ALL BIDS ON AN UNIQUE PRODUCT AS A SELLER
 rt.get('/show-product/:productId', getProduct, async (req, res) => {
@@ -94,43 +82,6 @@ rt.get('/show-bids/:productId', async (req, res) => {
         res.status(500).json({ message: err.message })
     }
 });
-
-//GET ALL BIDS ON AN UNIQUE PRODUCT AS A SELLER
-// rt.get('/show-bids/:productId', async (req, res) => {
-//     try {
-//         const query = { productId: req.params.productId };
-//         const sortByBid = { bidAmount: -1}
-//         const bids = await Bid.find(query).sort(sortByBid)
-//         res.json(bids)
-
-//     } catch (err) {
-//         res.status(500).json({ message: err.message })
-//     }
-// })
-
-//GET ALL BUYERS ON AN UNIQUE PRODUCT AS A SELLER
-// rt.get('/show-buyers/:productId', async (req, res) => {
-//     try {
-//         const emailQuery = { productId: req.params.productId };
-//         const sorter = { bidAmount: -1 }
-//         const buyersByEmail = await Bid.find(emailQuery).sort(sorter)
-//         let arr = []
-//         const emailId = buyersByEmail.map((value) => {
-
-//             let x = { email: value.email }
-//             return x
-
-//         })
-//         for(let i=0; i< emailId.length; i++) {
-//             let a = await Buyer.find(emailId[i]);
-//             arr.push(a[0])
-//         }
-       
-//         res.json(arr)
-//     } catch (err) {
-//         res.status(500).json({ message: err.message })
-//     }
-// })
 
 //MIDDLEWARE FOR AN UNIQUE PRODUCT
 async function getProduct(req, res, next) {
