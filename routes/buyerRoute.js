@@ -30,6 +30,7 @@ rt.post('/place-bid', async (req, res) => {
                 if(req.body.bidAmount > price.price) {
                     const newBid = await bid.save();
                     res.status(201).json(newBid)
+                    const setTrue = await Product.findByIdAndUpdate(req.body.productId, {bid: true});
                 } else {
                     res.json({ message: "Your bid is too low. The starting price is: $" + price.price})
                 }    
