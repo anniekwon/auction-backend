@@ -52,7 +52,7 @@ rt.delete('/delete/:productId', getProduct, async (req, res) => {
 //GET ALL BIDS ON AN UNIQUE PRODUCT AS A SELLER
 rt.get('/show-product/:productId', getProduct, async (req, res) => {
     try {
-        res.send(res.product);
+        res.send([res.product]);
     } catch(err) {
         res.status(500).json({ message: err.message })
     }
@@ -60,39 +60,69 @@ rt.get('/show-product/:productId', getProduct, async (req, res) => {
 
 //GET ALL BIDS ON AN UNIQUE PRODUCT AS A SELLER
 rt.get('/show-bids/:productId', async (req, res) => {
-    try {
-        const query = { productId: req.params.productId };
-        const sortByBid = { bidAmount: -1}
-        const bids = await Bid.find(query).sort(sortByBid)
-        res.json(bids)
+    let arr = []
 
-    } catch (err) {
+    try {
+        const bidQuery = { productId: req.params.productId };
+        const sortByBid = { bidAmount: -1 };
+        const bids = await Bid.find(bidQuery).sort(sortByBid);
+
+        for(let i=0; i<bids.length; i++) {
+            let buyerQuery = { email: bids[i].email };
+            let buyers = await Buyer.find(buyerQuery);
+            
+            let x = {
+                bidAmount: bids[i].bidAmount,
+                firstName: buyers[0].firstName,
+                email: buyers[0].email,
+                phone: buyers[0].phone
+            }
+
+            arr.push(x)
+        }
+
+        res.send(arr);
+    } catch(err) {
         res.status(500).json({ message: err.message })
     }
-})
+});
+
+//GET ALL BIDS ON AN UNIQUE PRODUCT AS A SELLER
+// rt.get('/show-bids/:productId', async (req, res) => {
+//     try {
+//         const query = { productId: req.params.productId };
+//         const sortByBid = { bidAmount: -1}
+//         const bids = await Bid.find(query).sort(sortByBid)
+//         res.json(bids)
+
+//     } catch (err) {
+//         res.status(500).json({ message: err.message })
+//     }
+// })
 
 //GET ALL BUYERS ON AN UNIQUE PRODUCT AS A SELLER
-rt.get('/show-buyers/:productId', async (req, res) => {
-    try {
-        const emailQuery = { productId: req.params.productId };
-        const buyersByEmail = await Bid.find(emailQuery)
-        let arr = []
-        const emailId = buyersByEmail.map((value) => {
+// rt.get('/show-buyers/:productId', async (req, res) => {
+//     try {
+//         const emailQuery = { productId: req.params.productId };
+//         const sorter = { bidAmount: -1 }
+//         const buyersByEmail = await Bid.find(emailQuery).sort(sorter)
+//         let arr = []
+//         const emailId = buyersByEmail.map((value) => {
 
-            let x = { email: value.email }
-            return x
+//             let x = { email: value.email }
+//             return x
 
-        })
-        for(let i=0; i< emailId.length; i++) {
-            let a = await Buyer.find(emailId[i]);
-            arr.push(a[0])
-        }
+//         })
+//         for(let i=0; i< emailId.length; i++) {
+//             let a = await Buyer.find(emailId[i]);
+//             arr.push(a[0])
+//         }
        
-        res.json(arr)
-    } catch (err) {
-        res.status(500).json({ message: err.message })
-    }
-})
+//         res.json(arr)
+//     } catch (err) {
+//         res.status(500).json({ message: err.message })
+//     }
+// })
 
 //MIDDLEWARE FOR AN UNIQUE PRODUCT
 async function getProduct(req, res, next) {
