@@ -65,32 +65,29 @@ rt.patch('/update-bid/:productId/:buyerEmailId/:newBidAmount', async (req, res) 
     }
 })
 
-//GET A BUYER BY UNIQUE ID
-rt.get('/:id', getBuyer, (req, res) => {
-    const buyer = getBuyerById(req.params.id)
-    res.send(buyer);
-});
+// //GET A BUYER BY UNIQUE ID
+// rt.get('/:id', getBuyer, (req, res) => {
+//     const buyer = getBuyerById(req.params.id)
+//     res.send(buyer);
+// });
 
-function getBuyerById(id) {
-    return Buyer.find(id)
-}
+// function getBuyerById(id) {
+//     return Buyer.find(id)
+// }
 
-//MIDDLEWARE FOR UNIQUE BUYER
-async function getBuyer(req, res, next){
-    let buyer;
-    try {
-        buyer = await Buyer.findById(req.params.id);
-        if(buyer == null) {
-            return res.status(404).json({ message: 'Cannot find BUYER'});
-        }
-    } catch (err) {
-        return res.status(500).json({ message: err.message });
-    }
-    res.buyer = buyer;
-    next();
-}
+// //MIDDLEWARE FOR UNIQUE BUYER
+// async function getBuyer(req, res, next){
+//     let buyer;
+//     try {
+//         buyer = await Buyer.findById(req.params.id);
+//         if(buyer == null) {
+//             return res.status(404).json({ message: 'Cannot find BUYER'});
+//         }
+//     } catch (err) {
+//         return res.status(500).json({ message: err.message });
+//     }
+//     res.buyer = buyer;
+//     next();
+// }
 
-module.exports = {
-    buyerRouter: rt,
-    getBuyerById
-};
+module.exports = rt
